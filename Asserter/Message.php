@@ -64,6 +64,8 @@ abstract class Message extends asserters\object {
                 )
             );
 
+        $this->pass();
+
         return $this;
     }
 
