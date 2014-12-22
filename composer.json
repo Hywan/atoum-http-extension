@@ -1,0 +1,32 @@
+{
+    "name"       : "atoum/http-extension",
+    "description": "Use HTTP asserters according to PSR-7.",
+    "type"       : "library",
+    "keywords"   : ["library", "http", "request", "response", "psr7"],
+    "homepage"   : "http://hoa-project.net/",
+    "license"    : "BSD-3-Clause",
+    "authors"    : [
+        {
+            "name" : "Ivan Enderlin",
+            "email": "ivan.enderlin@hoa-project.net"
+        },
+        {
+            "name"    : "Hoa community",
+            "homepage": "http://hoa-project.net/"
+        }
+    ],
+    "support": {
+        "email" : "support@lists.hoa-project.net",
+        "irc"   : "irc://irc.freenode.org/hoaproject",
+        "source": "http://git.hoa-project.net/"
+    },
+    "require": {
+        "atoum/atoum"     : "~1.0",
+        "psr/http-message": "~0.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Atoum\\HttpExtension\\": "."
+        }
+    }
+}
