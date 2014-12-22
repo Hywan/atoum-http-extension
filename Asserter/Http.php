@@ -56,7 +56,7 @@ class Http extends atoum\asserter {
     public function request ( $request ) {
 
         if(null === $this->_request)
-            $this->_request = new Request();
+            $this->_request = new Request($this->getGenerator());
 
         $this->_request->setWith($request);
 
@@ -66,7 +66,7 @@ class Http extends atoum\asserter {
     public function response ( ) {
 
         if(null === $this->_response)
-            $this->_response = new Response();
+            $this->_response = new Response($this->getGenerator());
 
         $this->_response->setWith($response);
 

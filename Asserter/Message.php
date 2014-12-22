@@ -51,9 +51,6 @@ use Psr;
 
 abstract class Message extends asserters\object {
 
-    protected $_version = null;
-    protected $_headers = null;
-
     public function setWith ( $value, $checkType = true ) {
 
         parent::setWith($value, $checkType);
@@ -75,78 +72,37 @@ abstract class Message extends asserters\object {
         return parent::valueIsSet($message);
     }
 
-    protected function getInnerAsserter ( $name, $asserterClassName ) {
-
-        if(null === $this->$name)
-            $this->$name = new $asserterClassName($this->getGenerator());
-
-        return $this->$name;
-    }
-
-    public function __get ( $name ) {
+    public function hasHeader ( $name, $value, $failMessage = null ) {
 
         $_value = $this->valueIsSet()->getValue();
 
-        switch(strtolower($name)) {
+        if(false === $_value->hasHeader($name)) {
 
-            case 'version':
-                $out   = $this->getInnerAsserter(
-                    '_version',
-                    asserters\string::class
-                );
-                $value = $_value->getProtocolVersion();
-              break;
+            $this->fail(
+                $failMessage ?:
+                sprintf(
+                    $this->getLocale()->_('Header %s does not exist.'),
+                    $name
+                )
+            );
 
-            case 'headers':
-                $out   = $this->getInnerAsserter(
-                    '_headers',
-                    asserters\phpArray::class
-                );
-                $value = $_value->getHeaders();
-              break;
-
-            default:
-                return parent::__get($name);
+            return $this;
         }
+        else
+            $this->pass();
 
-        $out->setWith($value);
+        if($value !== $_value->getHeader($name))
+            $this->fail(
+                $failMessage ?:
+                sprintf(
+                    $this->getLocale()->_('Header %s is not equal to %s.'),
+                    $name,
+                    $value
+                )
+            );
+        else
+            $this->pass();
 
-        return $out;
-    }
-
-    public function hasHeader ( $name ) {
-
-        static $boolean = null;
-
-        if(null === $boolean)
-            $boolean = new asserters\boolean($this->getGenerator());
-
-        $boolean->setWith($this->valueIsSet()->getValue()->hasHeader($name));
-
-        return $boolean;
-    }
-
-    public function header ( $name ) {
-
-        static $string = null;
-
-        if(null === $string)
-            $string = new asserters\string($this->getGenerator());
-
-        $string->setWith($this->valueIsSet()->getValue()->getHeader($name));
-
-        return $string;
-    }
-
-    public function headerAsArray ( $name ) {
-
-        static $array = null;
-
-        if(null === $array)
-            $array = new asserters\phpArray($this->getGenerator());
-
-        $array->setWith($this->valueIsSet()->getValue()->getHeaderAsArray($name));
-
-        return $array;
+        return $this;
     }
 }

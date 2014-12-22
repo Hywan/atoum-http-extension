@@ -94,9 +94,13 @@ class Manifest implements atoum\extension {
 
         $this->_test
              ->getAssertionManager()
-             ->setHandler('http', function ( ) use ( $http ) {
+             ->setHandler('httpRequest', function ( $request ) use ( $http ) {
 
-                 return $http;
+                 return $http->request($request);
+             })
+             ->setHandler('httpResponse', function ( $request ) use ( $http ) {
+
+                 return $http->response($request);
              });
 
         return;
